@@ -1,19 +1,13 @@
 from bs4 import BeautifulSoup
 import requests
+import re
 
 
 def parse(text):
-    phone = set()
-    current_text = ''
-    for char in text:
-        if char == '>':
-            current_text = ''
-        elif char == '<':
-            if current_text.strip() and (current_text !='[' and current_text != ', '):
-                phone.add(str(current_text))
-                current_text = ''
-        else:
-            current_text += char
+    phone = []
+    text_pattern = re.compile(r'<.*?>')
+    current_text = text_pattern.sub("", text).split(',')
+    phone.extend(current_text)
     return phone
 
 
@@ -31,8 +25,6 @@ def main():
 
     for name, price in zip(phone_name, phone_price):
          print(f"Phone: {name} | Price: {price}")
-
-    print("\n")
 
 
 if __name__ == "__main__":
